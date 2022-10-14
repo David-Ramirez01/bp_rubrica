@@ -6,12 +6,12 @@ import {getFirestore} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAMWLdAFI6vnAdoh8LoiCkEiSZaGFIuEUA",
-  authDomain: "pagina-bp-rubrica.firebaseapp.com",
-  projectId: "pagina-bp-rubrica",
-  storageBucket: "pagina-bp-rubrica.appspot.com",
-  messagingSenderId: "541479518770",
-  appId: "1:541479518770:web:26c9dcc7c02ba2c989722b"
+  apiKey: "AIzaSyBMIrswUCmPm6DX61LfRtmyIHT9oy_I28k",
+  authDomain: "bp-rubrica.firebaseapp.com",
+  projectId: "bp-rubrica",
+  storageBucket: "bp-rubrica.appspot.com",
+  messagingSenderId: "1072787854031",
+  appId: "1:1072787854031:web:84ce1ee5f20484728cddba"
 };
 
 // Initialize Firebase

@@ -15,7 +15,7 @@ const Pagina = () => {
   const guardarProduc = async (e) => {
     e.preventDefault();
     try{
-      const { data } = await addDoc(collection(bd,"Bp - Rubrica"),{
+      const {data} = await addDoc(collection(bd,"Bp - Rubrica"),{
         nombreProduc: Productos,
         descripP: Descripcion,
         nombreProV: prov,
@@ -32,16 +32,16 @@ const Pagina = () => {
           estaPro: esta_pro,
           fecPro:feP,
           fecVec: feV,
-          id: data.id
+          id: data.id,
         }
       ])
-
-      setProduct("")
-      setDescripcion("")
-      setProv("")
-      setesta_pro("")
-      setfeP("")
-      setfeV("")
+      
+      setProduct(' ')
+      setDescripcion(' ')
+      setProv(' ')
+      setesta_pro(' ')
+      setfeP('')
+      setfeV('')
 
     }catch(error) {
       console.log(error)
