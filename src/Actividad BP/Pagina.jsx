@@ -4,7 +4,7 @@ import { collection, addDoc, deleteDoc ,doc, onSnapshot, updateDoc } from 'fireb
 
 
 const Pagina = () => {
-  //const img = 'https://picsum.photos/200';
+  const img = 'https://picsum.photos/200';
   const [Productos, setProduct] = useState('')
   const [Descripcion, setDescripcion] = useState('')
   const [prov, setProv] = useState('')
@@ -148,6 +148,7 @@ const Pagina = () => {
               list_produc.map(item => (
                 <li className="list-group-item" key={item.id}>
                   <span className="lead">
+                    <img src={img} alt="Esto es una imagen ramdon" class="img-thumbnail" width='60px'/>-
                     {item.nombreProduc}-
                     {item.descripP}-
                     {item.nombreProV}-
