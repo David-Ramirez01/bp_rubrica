@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {bd} from '../firebase';
 import { collection, addDoc, deleteDoc ,doc, onSnapshot, updateDoc } from 'firebase/firestore';
-import { async } from '@firebase/util';
 
 
 const Pagina = () => {
@@ -171,7 +170,7 @@ const Pagina = () => {
               EditionMode ? 'Editar Productos' : 'Agregar Productos'
             }
           </h4>
-          <form onSubmit={guardarProduc}>
+          <form onSubmit={ EditionMode ? editPro : guardarProduc}>
             <input type="text" className="form-control mb-2" placeholder='Nombre del producto' value={Productos}
             onChange={(e)=> setProduct(e.target.value)}/>
             <input type="text" className="form-control mb-2" placeholder='Descripcion del producto' value={Descripcion}
