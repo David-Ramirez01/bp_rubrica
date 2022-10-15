@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {bd} from '../firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc ,doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { async } from '@firebase/util';
+
 
 const Pagina = () => {
   //const img = 'https://picsum.photos/200';
@@ -11,11 +13,26 @@ const Pagina = () => {
   const [feP, setfeP] = useState('')
   const [feV, setfeV] = useState('')
   const [list_produc, setlist_produc] = useState([])
+  const [EditionMode, setEditionMode] = useState(false)
+  const [id,setid] = useState('')
+
+  useEffect (() => {
+    const Odatos = async () => {
+      try{
+        await onSnapshot(collection(bd,'Bp - Rubrica'), (query) => {
+          setlist_produc(query.docs.map((doc) =>({...doc.data(),id:doc.id})))
+        })
+      }catch(error){
+        console.log(error)
+      }
+    }
+    Odatos();
+  },[])
 
   const guardarProduc = async (e) => {
     e.preventDefault();
     try{
-      const {data} = await addDoc(collection(bd,"Bp - Rubrica"),{
+      const data = await addDoc(collection(bd,'Bp - Rubrica'),{
         nombreProduc: Productos,
         descripP: Descripcion,
         nombreProV: prov,
@@ -25,7 +42,8 @@ const Pagina = () => {
       })
 
       setlist_produc([
-        ...list_produc,{
+        ...list_produc,
+        {
           nombreProduc: Productos,
           descripP: Descripcion,
           nombreProV: prov,
@@ -47,6 +65,77 @@ const Pagina = () => {
       console.log(error)
     }
   }
+
+  const Eliminar = async id => {
+    try{
+      await deleteDoc(doc(bd,'Bp - Rubrica', id))
+    }catch(error) {
+      console.log(error)
+    }
+  }
+
+  const edit = item => {
+    setProduct(item.nombreProduc)
+    setDescripcion(item.descripP)
+    setProv(item.prov)
+    setesta_pro(item.esta_pro)
+    setfeP(item.feP)
+    setfeV(item.feV)
+    setid(item.id)
+    setEditionMode(true)
+  }
+
+  const editPro = async e =>{
+    e.preventDefault();
+    try{
+      const docRef = doc(bd,'Bp - Rubrica',id);
+      await updateDoc(docRef,{
+        nombreProduc: Productos,
+        descripP: Descripcion,
+        nombreProV: prov,
+        estaPro: esta_pro,
+        fecPro:feP,
+        fecVec: feV,
+      })
+
+      const nuevalista = list_produc.map(
+        item => item.id === id ? {
+          id: id, 
+          nombreProduc: Productos,
+          descripP: Descripcion,
+         nombreProV: prov,
+          estaPro: esta_pro,
+          fecPro:feP,
+          fecVec: feV,
+        } : item
+      )
+
+      setlist_produc(nuevalista)
+      setProduct(' ')
+      setDescripcion(' ')
+      setProv(' ')
+      setesta_pro(' ')
+      setfeP('')
+      setfeV('')
+      setid(' ')
+      setEditionMode(false)
+
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+
+  const cancel = () => {
+    setEditionMode(false)
+    setProduct('')
+    setDescripcion('')
+    setProv('')
+    setesta_pro('')
+    setfeP('')
+    setfeV('')
+    setid('')
+  }
   return(
     <>
     <div className="container mt-5">
@@ -62,13 +151,15 @@ const Pagina = () => {
                   <span className="lead">
                     {item.nombreProduc}-
                     {item.descripP}-
-                    {item.prov}-
+                    {item.nombreProV}-
                     {item.estaPro}-
-                    {item.feP}-
-                    {item.feV}-
+                    {item.fecPro}-
+                    {item.fecVec}-
                   </span>
-                  <button className='btn btn-danger btn-sm fload-end mx-2'>Eliminar</button>
-                  <button className='btn btn-warning btn-sm fload-end '>Editar</button>
+                  <button className='btn btn-danger btn-sm fload-end mx-2'
+                  onClick={() => Eliminar(item.id)}>Eliminar</button>
+                  <button className='btn btn-warning btn-sm fload-end'
+                  onClick={() => edit(item)}>Editar</button>
                 </li>
               ))
             }
@@ -76,7 +167,9 @@ const Pagina = () => {
         </div>
         <div className="col-4">
           <h4 className='text-center'>
-            Agregar Productos
+            {
+              EditionMode ? 'Editar Productos' : 'Agregar Productos'
+            }
           </h4>
           <form onSubmit={guardarProduc}>
             <input type="text" className="form-control mb-2" placeholder='Nombre del producto' value={Productos}
@@ -93,7 +186,20 @@ const Pagina = () => {
             <label htmlFor="">Fecha de vencimiento</label>
             <input type="date" className="form-control mb-2" value={feV}
             onChange={(e)=> setfeV(e.target.value)}/>
-            <button className="btn btn-primary btn-block" type='submit'>Agregar</button>
+            {
+              EditionMode ? 
+              (
+                <>
+                  <button 
+                  className="btn btn-warning btn-block" 
+                  type='submit'>Editar</button>
+                  <button 
+                  className="btn btn-dark btn-block mx-2"
+                  onClick={() => cancel()}>Cancelar</button>
+                </>
+              ):
+                  <button className="btn btn-primary btn-block" type='submit'>Agregar</button>
+            }
           </form>
         </div>
       </div>
