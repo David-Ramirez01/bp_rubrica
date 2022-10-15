@@ -30,40 +30,40 @@ const Pagina = () => {
 
   const guardarProduc = async (e) => {
     e.preventDefault();
-    try{
-      const data = await addDoc(collection(bd,'Bp - Rubrica'),{
-        nombreProduc: Productos,
-        descripP: Descripcion,
-        nombreProV: prov,
-        estaPro: esta_pro,
-        fecPro:feP,
-        fecVec: feV
-      })
-
-      setlist_produc([
-        ...list_produc,
-        {
+      try{
+        const data = await addDoc(collection(bd,'Bp - Rubrica'),{
           nombreProduc: Productos,
           descripP: Descripcion,
           nombreProV: prov,
           estaPro: esta_pro,
           fecPro:feP,
-          fecVec: feV,
-          id: data.id,
-        }
-      ])
-      
-      setProduct(' ')
-      setDescripcion(' ')
-      setProv(' ')
-      setesta_pro(' ')
-      setfeP('')
-      setfeV('')
-
-    }catch(error) {
-      console.log(error)
+          fecVec: feV
+        })
+  
+        setlist_produc([
+          ...list_produc,
+          {
+            nombreProduc: Productos,
+            descripP: Descripcion,
+            nombreProV: prov,
+            estaPro: esta_pro,
+            fecPro:feP,
+            fecVec: feV,
+            id: data.id,
+          }
+        ])
+        
+        setProduct(' ')
+        setDescripcion(' ')
+        setProv(' ')
+        setesta_pro(' ')
+        setfeP('')
+        setfeV('')
+      }catch(error) {
+        console.log(error)
+      }
     }
-  }
+    
 
   const Eliminar = async id => {
     try{
@@ -172,7 +172,7 @@ const Pagina = () => {
             }
           </h4>
           <form onSubmit={ EditionMode ? editPro : guardarProduc}>
-            <input type="text" className="form-control mb-2" placeholder='Nombre del producto' value={Productos}
+            <input type="text" className="form-control mb-2" id="pd" placeholder='Nombre del producto' value={Productos}
             onChange={(e)=> setProduct(e.target.value)}/>
             <input type="text" className="form-control mb-2" placeholder='Descripcion del producto' value={Descripcion}
             onChange={(e)=> setDescripcion(e.target.value)}/>
@@ -180,10 +180,10 @@ const Pagina = () => {
             onChange={(e)=> setProv(e.target.value)}/>
             <input type="text" className='form-control mb-2' placeholder='Estados del producto' value={esta_pro}
             onChange={(e)=> setesta_pro(e.target.value)}/>
-            <label htmlFor="">Fecha de Produccion</label>
+            <label htmlFor="" >Fecha de Produccion</label>
             <input type="date" className="form-control mb-2" value={feP}
             onChange={(e)=> setfeP(e.target.value)}/>
-            <label htmlFor="">Fecha de vencimiento</label>
+            <label htmlFor="" >Fecha de vencimiento</label>
             <input type="date" className="form-control mb-2" value={feV}
             onChange={(e)=> setfeV(e.target.value)}/>
             {
